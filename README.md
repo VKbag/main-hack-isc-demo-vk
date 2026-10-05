@@ -5,6 +5,7 @@ Portable SailPoint **IdentityNow demo** architect package: Cursor agent + **full
 ## Features
 
 - **Full Cursor demo architect** — `@vk-sailpoint-isc-demo-architect` for ISC design + live demo admin
+- **Slash command** — `/isc-demo-architect` (+ fill-in template under `.cursor/prompts/`)
 - **Optional lite agent** — `@vk-sailpoint-isc-demo-architect-lite` for read-only verify posture
 - **Matching Cursor rules** — `.cursor/rules/` for both profiles
 - **Full demo MCP** — sources, identity profiles, transforms, access, governance, workflows, sp-config, accounts, `api_request`
@@ -53,11 +54,19 @@ chmod 600 ~/.cursor/sailpoint-isc-demo.env
 
 Register MCP in Cursor (see `.cursor/mcp.json.example`). Default entry points at **full** `server.py`.
 
-Reload MCP servers, then:
+Reload MCP servers, then in chat:
+
+```
+/isc-demo-architect WHOAMI
+```
+
+or:
 
 ```
 @vk-sailpoint-isc-demo-architect demo_whoami then list sources
 ```
+
+Fill-in template: `.cursor/prompts/isc-demo-architect.template.md`
 
 ## MCP tool domains (full `server.py`)
 

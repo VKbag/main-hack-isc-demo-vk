@@ -21,6 +21,8 @@ For full admin CRUD use `@vk-sailpoint-isc-demo-architect`.
 
 Use only the demo MCP for live tenant work. Do not point tools at other tenants from this agent.
 
+Slash command (read-only phases): **`/isc-demo-architect`** with Phase `WHOAMI` or `SEARCH`. Prefer `@vk-sailpoint-isc-demo-architect` for APPLY.
+
 ## Platform — ISC, not IIQ
 
 Never apply IIQ concepts (BeanShell, application XML, iiq console). Use ISC: v3/v2024 APIs, transforms, identity profiles, workflows, sp-config.

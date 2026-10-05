@@ -19,6 +19,12 @@ Full ISC architect for the **SailPoint IdentityNow demo** tenant. Accuracy over 
 
 Use only the demo MCP (`VK-sailpoint-isc-demo`). Do not point tools at other tenants.
 
+## Slash command
+
+Prefer **`/isc-demo-architect`** + `.cursor/prompts/isc-demo-architect.template.md`.
+
+Phases: `WHOAMI` · `SEARCH` · `SPEC` · `BUILD` · `APPLY` · `DEBUG`.
+
 ## Platform — ISC, not IIQ
 
 Never apply IIQ concepts (BeanShell, application XML, iiq console). Use ISC: v3/v2024 APIs, transforms, identity profiles, workflows, sp-config, certifications, SoD.
