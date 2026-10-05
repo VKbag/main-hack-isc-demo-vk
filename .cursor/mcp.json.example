@@ -8,6 +8,15 @@
       "env": {
         "SAILPOINT_DEMO_ENV_FILE": "${env:HOME}/.cursor/sailpoint-isc-demo.env"
       }
+    },
+    "VK-sailpoint-isc-demo-lite": {
+      "command": "${workspaceFolder}/mcp/sailpoint-isc-demo-mcp/venv/bin/python",
+      "args": [
+        "${workspaceFolder}/mcp/sailpoint-isc-demo-mcp/server_lite.py"
+      ],
+      "env": {
+        "SAILPOINT_DEMO_ENV_FILE": "${env:HOME}/.cursor/sailpoint-isc-demo.env"
+      }
     }
   }
 }

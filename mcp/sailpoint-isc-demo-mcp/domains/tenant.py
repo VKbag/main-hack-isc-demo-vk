@@ -5,7 +5,7 @@ from __future__ import annotations
 from client import ALLOWED_API_BASE, err, get_client, ok
 
 
-def register(mcp) -> None:
+def register(mcp, *, lite: bool = False) -> None:
     @mcp.tool()
     def demo_whoami() -> str:
         """Verify demo-tenant auth and org. Fails if API base is not the allowlisted demo host."""
@@ -28,5 +28,27 @@ def register(mcp) -> None:
                     "org": org,
                 }
             )
+        except Exception as exc:
+            return err(exc)
+
+    if lite:
+        return
+
+    @mcp.tool()
+    def get_org_config() -> str:
+        """Read demo org-config (v2024)."""
+        try:
+            return ok(get_client().get("/org-config", tool="get_org_config"))
+        except Exception as exc:
+            return err(exc)
+
+    @mcp.tool()
+    def list_connectors(filters: str | None = None) -> str:
+        """List available connector types in the demo tenant."""
+        try:
+            params = {"limit": 250}
+            if filters:
+                params["filters"] = filters
+            return ok(get_client().get("/connectors", tool="list_connectors", params=params))
         except Exception as exc:
             return err(exc)

@@ -1,4 +1,4 @@
-"""Allowlisted SailPoint ISC demo-tenant HTTP client."""
+"""Allowlisted SailPoint ISC demo-tenant HTTP client (full admin surface)."""
 
 from __future__ import annotations
 
@@ -21,6 +21,18 @@ AUDIT_DIR = Path(__file__).resolve().parent / ".audit"
 
 class DemoGuardError(RuntimeError):
     """Raised when a non-demo host or unsafe config is detected."""
+
+
+class DestructiveConfirmError(RuntimeError):
+    """Raised when a destructive operation lacks confirm_destructive=True."""
+
+
+def require_destructive(confirm_destructive: bool, blast_radius: str) -> None:
+    if not confirm_destructive:
+        raise DestructiveConfirmError(
+            "Destructive operation blocked. Re-call with confirm_destructive=true. "
+            f"Blast radius: {blast_radius}"
+        )
 
 
 def _ca_bundle() -> str | bool:
@@ -159,6 +171,8 @@ class SailPointDemoClient:
         version: str | None = None,
         params: dict | None = None,
         json_body: Any = None,
+        data: Any = None,
+        files: Any = None,
         headers: dict | None = None,
         expected: tuple[int, ...] = (200, 201, 202, 204),
     ) -> Any:
@@ -169,13 +183,19 @@ class SailPointDemoClient:
             "Authorization": f"Bearer {token}",
             "Accept": "application/json",
         }
-        if json_body is not None:
+        if json_body is not None and files is None:
             hdrs["Content-Type"] = "application/json"
         if headers:
             hdrs.update(headers)
 
         resp = self._client.request(
-            method, url, params=params, json=json_body, headers=hdrs
+            method,
+            url,
+            params=params,
+            json=json_body,
+            data=data,
+            files=files,
+            headers=hdrs,
         )
         if resp.status_code in (301, 302, 303, 307, 308):
             loc = resp.headers.get("location", "")
@@ -200,6 +220,15 @@ class SailPointDemoClient:
 
     def post(self, path: str, **kwargs: Any) -> Any:
         return self.request("POST", path, **kwargs)
+
+    def put(self, path: str, **kwargs: Any) -> Any:
+        return self.request("PUT", path, **kwargs)
+
+    def patch(self, path: str, **kwargs: Any) -> Any:
+        return self.request("PATCH", path, **kwargs)
+
+    def delete(self, path: str, **kwargs: Any) -> Any:
+        return self.request("DELETE", path, **kwargs)
 
 
 _client: SailPointDemoClient | None = None

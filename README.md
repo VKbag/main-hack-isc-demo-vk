@@ -1,21 +1,24 @@
-# ISC Demo Architect (Lite)
+# ISC Demo Architect
 
-Portable SailPoint **IdentityNow demo** architect package: Cursor agent + read-only MCP for Hack Day / demo tenants.
+Portable SailPoint **IdentityNow demo** architect package: Cursor agent + **full** allowlisted admin MCP for Hack Day / demo tenants.
 
 ## Features
 
-- **Cursor demo architect agent** — `@vk-sailpoint-isc-demo-architect-lite` for ISC design Q&A and live demo-tenant verify
-- **Matching Cursor rule** — same guidance as a project rule (`.cursor/rules/`)
-- **Read-only demo MCP** — FastMCP server (`VK-sailpoint-isc-demo`) for safe Hack Day demos
-- **Hard API host allowlist** — locked to `devrel-ga-25104.api.identitynow-demo.com`; other tenants refused
-- **OAuth client-credentials auth** — uses a local PAT (`client_id` / `client_secret`) from a gitignored env file
-- **Identity lookup** — `search_identities` and `get_identity` via ISC Search / Identities APIs
-- **Identity profile read** — `list_identity_profiles` and `get_identity_profile`
-- **Source inventory read** — `list_sources` and `get_source`
-- **Tenant smoke check** — `demo_whoami` (auth + org-config + allowlist confirmation)
-- **Local audit trail** — request logging under `mcp/**/.audit/` (gitignored)
-- **Secrets stay local** — `.env.example` + `~/.cursor/sailpoint-isc-demo.env`; nothing sensitive committed
-- **Cursor MCP example config** — drop-in `.cursor/mcp.json.example` for registration
+- **Full Cursor demo architect** — `@vk-sailpoint-isc-demo-architect` for ISC design + live demo admin
+- **Optional lite agent** — `@vk-sailpoint-isc-demo-architect-lite` for read-only verify posture
+- **Matching Cursor rules** — `.cursor/rules/` for both profiles
+- **Full demo MCP** — sources, identity profiles, transforms, access, governance, workflows, sp-config, accounts, `api_request`
+- **Optional lite MCP** — `server_lite.py` (whoami + identity/source reads only)
+- **Hard API host allowlist** — locked to `devrel-ga-25104.api.identitynow-demo.com`
+- **Destructive guards** — mutate/provision tools require `confirm_destructive=true`
+- **OAuth client-credentials auth** — local PAT from gitignored env file
+- **Identity tools** — search/get, IP CRUD/mappings, transforms, lifecycle, process identities
+- **Access model** — entitlements, access profiles, roles, governance groups, segments
+- **Governance** — Search, certification campaigns, SoD policies, work items, AR status
+- **Automation** — workflows, trigger subscriptions, sp-config export/import, task status
+- **Ops** — accounts enable/disable, activities, connector rules, generic allowlisted `api_request`
+- **Local audit trail** — `mcp/**/.audit/` (gitignored)
+- **Secrets stay local** — `.env.example` + `~/.cursor/sailpoint-isc-demo.env`
 
 ## Demo tenant
 
@@ -30,9 +33,8 @@ MCP refuses any other API host.
 
 - **Never commit** `SAILPOINT_CLIENT_SECRET`, filled `.env`, or PATs.
 - Put credentials in `~/.cursor/sailpoint-isc-demo.env` (`chmod 600`) using `.env.example` as a template.
+- Mutations on the demo tenant are real — use `confirm_destructive` deliberately.
 - `.gitignore` excludes `.env`, audit logs, and local `mcp.json`.
-
-If credentials were pasted into chat or tickets, **rotate the PAT** in the demo tenant.
 
 ## Setup
 
@@ -49,23 +51,28 @@ cp .env.example ~/.cursor/sailpoint-isc-demo.env
 chmod 600 ~/.cursor/sailpoint-isc-demo.env
 ```
 
-Register MCP in Cursor (see `.cursor/mcp.json.example`). Use absolute paths if your Cursor build does not expand `${workspaceFolder}`.
+Register MCP in Cursor (see `.cursor/mcp.json.example`). Default entry points at **full** `server.py`.
 
-Reload MCP servers, then in Agent chat:
+Reload MCP servers, then:
 
 ```
-@vk-sailpoint-isc-demo-architect-lite demo_whoami then search for Wanda.Watkins
+@vk-sailpoint-isc-demo-architect demo_whoami then list sources
 ```
 
-## MCP tools (v1 read-only)
+## MCP tool domains (full `server.py`)
 
-| Tool | Purpose |
-|------|---------|
-| `demo_whoami` | Auth + org + allowlist check |
-| `search_identities` | ISC Search on identities |
-| `get_identity` | Identity by id |
-| `list_identity_profiles` / `get_identity_profile` | Identity profiles |
-| `list_sources` / `get_source` | Sources |
+| Domain | Examples |
+|--------|----------|
+| Tenant | `demo_whoami`, `get_org_config`, `list_connectors` |
+| Sources | `list_sources`, `create_source`, `create_delimited_file_source`, schemas, CSV upload/load |
+| Identity | IP CRUD, transforms, `search_identities`, `preview_identity`, lifecycle |
+| Access | entitlements, access profiles, roles, segments, governance groups |
+| Governance | `search`, campaigns, SoD, work items, AR status |
+| Automation | workflows, triggers, sp-config, task status |
+| Ops | accounts, activities, connector rules, `api_request` |
+| Helpers | `spconfig_export_by_names`, manager correlation, role criteria builder |
+
+Lite (`server_lite.py`): `demo_whoami`, identity search/get, list/get sources & identity profiles.
 
 ## Verify without Cursor
 
