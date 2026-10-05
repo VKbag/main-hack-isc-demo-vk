@@ -2,11 +2,20 @@
 
 Portable SailPoint **IdentityNow demo** architect package: Cursor agent + read-only MCP for Hack Day / demo tenants.
 
-Includes:
+## Features
 
-- Cursor agent: `@vk-sailpoint-isc-demo-architect-lite`
-- Cursor rule (same guidance)
-- Thin **read-only** MCP server hard-allowlisted to the demo API host
+- **Cursor demo architect agent** — `@vk-sailpoint-isc-demo-architect-lite` for ISC design Q&A and live demo-tenant verify
+- **Matching Cursor rule** — same guidance as a project rule (`.cursor/rules/`)
+- **Read-only demo MCP** — FastMCP server (`VK-sailpoint-isc-demo`) for safe Hack Day demos
+- **Hard API host allowlist** — locked to `devrel-ga-25104.api.identitynow-demo.com`; other tenants refused
+- **OAuth client-credentials auth** — uses a local PAT (`client_id` / `client_secret`) from a gitignored env file
+- **Identity lookup** — `search_identities` and `get_identity` via ISC Search / Identities APIs
+- **Identity profile read** — `list_identity_profiles` and `get_identity_profile`
+- **Source inventory read** — `list_sources` and `get_source`
+- **Tenant smoke check** — `demo_whoami` (auth + org-config + allowlist confirmation)
+- **Local audit trail** — request logging under `mcp/**/.audit/` (gitignored)
+- **Secrets stay local** — `.env.example` + `~/.cursor/sailpoint-isc-demo.env`; nothing sensitive committed
+- **Cursor MCP example config** — drop-in `.cursor/mcp.json.example` for registration
 
 ## Demo tenant
 
