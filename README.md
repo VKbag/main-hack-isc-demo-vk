@@ -21,6 +21,57 @@ Portable SailPoint **IdentityNow demo** architect package: Cursor agent + **full
 - **Local audit trail** — `mcp/**/.audit/` (gitignored)
 - **Secrets stay local** — `.env.example` + `~/.cursor/sailpoint-isc-demo.env`
 
+## Architecture
+
+Cursor agent → demo MCP tools → host allowlist + OAuth from local env → demo API only → tenant objects. Writes need `confirm_destructive=true`.
+
+```mermaid
+flowchart LR
+  subgraph Cursor["Cursor"]
+    U[You]
+    A["@vk-sailpoint-isc-demo-architect<br/>or /isc-demo-architect"]
+    R[".cursor rules"]
+  end
+
+  subgraph MCP["VK-sailpoint-isc-demo MCP"]
+    L["Lite path<br/>whoami · search · list"]
+    F["Full path<br/>sources · identity · access<br/>governance · workflows · ops"]
+    G{"Mutate / provision?"}
+    C["confirm_destructive=true<br/>+ blast radius"]
+    X[Blocked]
+  end
+
+  subgraph Client["Allowlisted client"]
+    E["~/.cursor/sailpoint-isc-demo.env<br/>client_id / secret"]
+    H{"API host =<br/>devrel-ga-25104.api…?"}
+    O["OAuth<br/>client_credentials"]
+    AUD[".audit/ jsonl"]
+  end
+
+  subgraph Tenant["SailPoint demo tenant"]
+    API["API<br/>*.api.identitynow-demo.com"]
+    UI["UI<br/>*.identitynow-demo.com"]
+    OBJ["Sources · Identities · Roles<br/>Workflows · Campaigns · …"]
+  end
+
+  U --> A
+  R -.-> A
+  A -->|MCP tools| L
+  A -->|MCP tools| F
+  L --> H
+  F --> G
+  G -->|read| H
+  G -->|write without confirm| X
+  G -->|write with confirm| C --> H
+  H -->|no| X
+  H -->|yes| O
+  E --> O
+  O --> API
+  API --> OBJ
+  API --> AUD
+  UI -.->|admin UI| OBJ
+```
+
 ## Demo tenant
 
 | | |
