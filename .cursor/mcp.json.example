@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "VK-sailpoint-isc-demo": {
+      "command": "${workspaceFolder}/mcp/sailpoint-isc-demo-mcp/venv/bin/python",
+      "args": [
+        "${workspaceFolder}/mcp/sailpoint-isc-demo-mcp/server.py"
+      ],
+      "env": {
+        "SAILPOINT_DEMO_ENV_FILE": "${env:HOME}/.cursor/sailpoint-isc-demo.env"
+      }
+    }
+  }
+}
