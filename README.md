@@ -2,6 +2,26 @@
 
 Portable SailPoint **IdentityNow demo** architect package: Cursor agent + **full** allowlisted admin MCP for Hack Day / demo tenants.
 
+## Open as its own Cursor session
+
+This folder is a **standalone workspace**. Open only this directory in Cursor (not the larger SailPoint ISC tree):
+
+1. **File → Open Folder…** → `Documents/Projects/main-hack-isc-demo-vk`
+2. Ensure credentials exist: `~/.cursor/sailpoint-isc-demo.env` (from `.env.example`)
+3. Reload MCP if needed
+4. Start with `/isc-demo-architect WHOAMI` or `@vk-sailpoint-isc-demo-architect`
+
+Included here (everything for a demo-only session):
+
+| Path | Purpose |
+|------|---------|
+| `.cursor/agents/` | Full + lite demo architects |
+| `.cursor/rules/` | Matching rules |
+| `.cursor/commands/isc-demo-architect.md` | Slash command |
+| `.cursor/prompts/` | Fill-in template |
+| `.cursor/mcp.json` | Local MCP registration (gitignored; create from example) |
+| `mcp/sailpoint-isc-demo-mcp/` | Full + lite MCP servers |
+
 ## Features
 
 - **Full Cursor demo architect** — `@vk-sailpoint-isc-demo-architect` for ISC design + live demo admin
@@ -103,7 +123,7 @@ cp .env.example ~/.cursor/sailpoint-isc-demo.env
 chmod 600 ~/.cursor/sailpoint-isc-demo.env
 ```
 
-Register MCP in Cursor (see `.cursor/mcp.json.example`). Default entry points at **full** `server.py`.
+Register MCP: copy `.cursor/mcp.json.example` → `.cursor/mcp.json` and set absolute paths to this folder’s `venv` + `server.py` (a local `mcp.json` is already used when you develop from this machine). Default entry points at **full** `server.py`.
 
 Reload MCP servers, then in chat:
 
